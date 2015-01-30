@@ -3,7 +3,6 @@ package cop5555sp15;
 import cop5555sp15.TokenStream.Kind;
 import cop5555sp15.TokenStream.Token;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import static cop5555sp15.TokenStream.Kind.*;
@@ -12,7 +11,7 @@ public class Scanner {
 
 
     private enum State {
-        START, COMMENT, IDENT, INT_LITERAL, STRING_LITERAL, BOOL_LITERAL, NULL_LITERAL, SEPERATOR,
+        START, COMMENT, IDENT, INT_LITERAL, STRING_LITERAL, SEPERATOR,
         OPERATOR, END
     }
 
@@ -64,7 +63,7 @@ public class Scanner {
         } else if (ch == '\r') {
             if (index + 1 < stream.inputChars.length) {
                 char next = stream.inputChars[index + 1];
-                if (ch == '\r' && next == '\n') {
+                if (next == '\n') {
                     lineNum++;
                     getch(1);
                 } else {
@@ -101,7 +100,7 @@ public class Scanner {
                         if (index + 1 < stream.inputChars.length) {
                             char next = stream.inputChars[index + 1];
                             int beg = index;
-                            if (ch == '/' && next == '*') {
+                            if (next == '*') {
                                 if (!getch(2)) {
                                     t = stream.new Token(UNTERMINATED_COMMENT, beg, beg + 2, lineNum);
                                     state = State.END;
@@ -303,6 +302,15 @@ public class Scanner {
                     beg = index - 1;
                     while (ch != '"') {
                         newLineCheck();
+                        if(ch == '\\')
+                        {
+                            if (index + 1 < stream.inputChars.length) {
+                                next = stream.inputChars[index + 1];
+                                if (next == '\"') {
+                                    getch(1);
+                                }
+                            }
+                        }
                         if (!getch(1)) {
                             t = stream.new Token(UNTERMINATED_STRING, beg, index+1, lineNum);
                             state = State.END;
