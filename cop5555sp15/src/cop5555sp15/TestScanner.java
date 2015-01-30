@@ -318,6 +318,22 @@ public class TestScanner {
     }
 
     @Test
+    public void multiLineComment() {
+        System.out.println("multiLineComment");
+        String input = " /*true false\n null*/ ";
+        System.out.println(input);
+        TokenStream stream = new TokenStream(input);
+        Scanner scanner = new Scanner(stream);
+        scanner.scan();
+        System.out.println(stream);
+        Kind[] expectedKinds = { EOF };
+        String[] expectedTexts = { "" }; // need empty string for eof
+        assertArrayEquals(expectedKinds, makeKindArray(stream));
+        assertArrayEquals(expectedTexts, makeTokenTextArray(stream));
+
+    }
+
+    @Test
     public void comments() {
         System.out.println("comments");
         String input = "/**/ 0 1 45+ 67<=9";
