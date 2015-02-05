@@ -329,7 +329,9 @@ public class TestSimpleParser {
     public void FactorComplete()throws SyntaxException {
         System.out.println("FactorComplete");
         String input = "import X.Y.Z; class A  { A = key(B); print value(A); A = size(B);" +
-                " A={A->print C;};" +
+                " A={A->print C;}; A=C; A=C[A]; A = 2; A = true; A = false; A = \"Test\";" +
+                " A = \"Test\"+\"2\"; A = (1*2); A=!B; A = -A; A = A(A,B[C],@[D]);" +
+                " A = @[D]; A = @@[A:A[B],B:false,C:2];" +
                 " return A;}";
         System.out.println(input);
         parseCorrectInput(input);
