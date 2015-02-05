@@ -78,6 +78,7 @@ public class TokenStream {
         IDENT,
         /* reserved words */
         KW_INT, KW_STRING, KW_BOOLEAN, KW_IMPORT, KW_CLASS, KW_DEF, KW_WHILE, KW_IF, KW_ELSE, KW_RETURN, KW_PRINT,
+        KW_KEY,KW_VALUE,KW_SIZE,
         /* boolean literals */
         BL_TRUE, BL_FALSE,
         /* null literal */
