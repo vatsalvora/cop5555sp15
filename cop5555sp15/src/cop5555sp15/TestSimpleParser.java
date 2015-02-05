@@ -89,6 +89,13 @@ public class TestSimpleParser {
 		parseIncorrectInput(input, ExpectedIncorrectTokenKind);
 	}
 
+    @Test
+    public void empty_Vardec() throws SyntaxException {
+        System.out.println("empty_Vardec");
+        String input = "class A {def B;} ";
+        System.out.println(input);
+        parseCorrectInput(input);
+    }
 
 	@Test
 	public void def_simple_type1() throws SyntaxException {

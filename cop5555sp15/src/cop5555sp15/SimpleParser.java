@@ -98,6 +98,9 @@ public class SimpleParser {
 	static final Kind[] VERY_STRONG_OPS = { LSHIFT, RSHIFT };
     static final Kind[] Type_Poss = {KW_INT,KW_BOOLEAN,KW_STRING,AT};
     static final Kind[] Simple_Type = {KW_INT,KW_BOOLEAN,KW_STRING};
+    static final Kind[] Statement_Kinds = {IDENT,KW_WHILE,KW_IF,MOD,KW_RETURN};
+    static final Kind[] Statement_PredictSet = {IDENT,KW_PRINT,KW_WHILE,KW_IF,MOD,KW_RETURN};
+    static final Kind[] Factor_Kinds = {INT_LIT,BL_TRUE,BL_FALSE,STRING_LIT};
 
 
 	public void parse() throws SyntaxException {
@@ -147,8 +150,7 @@ public class SimpleParser {
                 }
             }
             else {
-                if (t.kind == IDENT || t.kind == KW_WHILE || t.kind == KW_IF || t.kind == MOD
-                        || t.kind == KW_RETURN) {
+                if (isKind(Statement_Kinds)) {
                     Statement();
                     match(SEMICOLON);
                     break;
@@ -160,12 +162,259 @@ public class SimpleParser {
 		match(RCURLY);
 	}
 
-    private void Statement() {
-        //TODO implement
+    private void VarDec()  throws SyntaxException {
+        if (t.kind == IDENT) {
+            match(IDENT);
+            if (t.kind == COLON) { // VarDec
+                match(COLON);
+                Type();
+            }
+            // else empty
+        }
+        // else empty
     }
 
-    private void Closure() {
+    private void Statement() throws SyntaxException {
         //TODO implement
+        if(t.kind == IDENT)
+        {
+            LValue();
+            match(ASSIGN);
+            Expression();
+        }
+        else if(t.kind == KW_PRINT)
+        {
+            match(KW_PRINT);
+            Expression();
+        }
+        else if(t.kind == KW_WHILE)
+        {
+            match(KW_WHILE);
+            if(t.kind == TIMES){
+                match(TIMES);
+                match(LPAREN);
+                Expression();
+                if(t.kind == RANGE) // Range Expression
+                {
+                    match(RANGE);
+                    Expression();
+                }
+                match(RPAREN);
+                Block();
+            }
+            else
+            {
+                match(LPAREN);
+                Expression();
+                match(RPAREN);
+                Block();
+            }
+        }
+        else if(t.kind == KW_IF)
+        {
+            match(KW_IF);
+            match(LPAREN);
+            Expression();
+            match(RPAREN);
+            Block();
+            if(t.kind == KW_ELSE)
+            {
+                match(KW_ELSE);
+                Block();
+            }
+        }
+        else if(t.kind == MOD)
+        {
+            match(MOD);
+            Expression();
+        }
+        else if(t.kind == KW_RETURN)
+        {
+            match(KW_RETURN);
+            Expression();
+        }
+    }
+
+    private void Expression() throws SyntaxException{
+        //TODO implement
+        Term();
+        while(isKind(REL_OPS))
+        {
+            RelOP();
+            Term();
+        }
+    }
+
+    private void RelOP() throws SyntaxException {
+        match(REL_OPS);
+    }
+
+    private void Elem() throws SyntaxException {
+        Thing();
+        while(isKind(STRONG_OPS))
+        {
+            StrongOp();
+            Thing();
+        }
+    }
+
+    private void StrongOp() throws SyntaxException {
+        match(STRONG_OPS);
+    }
+
+    private void Thing() throws SyntaxException {
+        Factor();
+        while (isKind(VERY_STRONG_OPS)){
+            VeryStrongOp();
+            Factor();
+        }
+    }
+
+    private void VeryStrongOp() throws SyntaxException {
+        match(VERY_STRONG_OPS);
+    }
+
+    private void Factor() throws SyntaxException {
+        if(t.kind == IDENT)
+        {
+            match(IDENT);
+            if(t.kind == LSQUARE){
+                match(LSQUARE);
+                Expression();
+                match(RSQUARE);
+            }
+            else if(t.kind == LPAREN) // ClosureEvalExpression
+            {
+                match(LPAREN);
+                ExpressionList();
+                match(RPAREN);
+            }
+        }
+        else if(isKind(Factor_Kinds))
+        {
+            match(Factor_Kinds);
+        }
+        else if(t.kind == LPAREN)
+        {
+            match(LPAREN);
+            Expression();
+            match(RPAREN);
+        }
+        else if(t.kind == NOT)
+        {
+            match(NOT);
+            Factor();
+        }
+        else if(t.kind == KW_SIZE)
+        {
+            match(KW_SIZE);
+            Expression();
+        }
+        else if(t.kind == KW_KEY)
+        {
+            match(KW_KEY);
+            match(LPAREN);
+            Expression();
+            match(RPAREN);
+        }
+        else if(t.kind == KW_VALUE)
+        {
+            match(KW_VALUE);
+            match(LPAREN);
+            Expression();
+            match(RPAREN);
+        }
+        else if(t.kind == LCURLY)
+        {
+            Closure();
+        }
+        else if(t.kind == AT) // List
+        {
+            match(AT);
+            if(t.kind == AT) //MapList
+            {
+                match(AT);
+                match(LSQUARE);
+                KeyValueList();
+                match(RSQUARE);
+            }
+            else {
+                match(LSQUARE);
+                ExpressionList();
+                match(RSQUARE);
+            }
+        }
+    }
+
+    private void KeyValueList() throws SyntaxException {
+        if(t.kind != RSQUARE)
+        {
+            KeyValueExpression();
+            while(t.kind != RSQUARE)
+            {
+                match(COMMA);
+                KeyValueExpression();
+            }
+        }
+    }
+
+    private void KeyValueExpression() throws SyntaxException {
+        Expression();
+        match(COLON);
+        Expression();
+    }
+
+    private void ExpressionList() throws SyntaxException {
+        if(t.kind != RPAREN)
+        {
+            Expression();
+            while(t.kind != RPAREN){
+                match(COMMA);
+                Expression();
+            }
+        }
+    }
+
+    private void WeakOp() throws SyntaxException {
+        match(WEAK_OPS);
+    }
+
+    private void Term() throws SyntaxException {
+        Elem();
+        while (isKind(WEAK_OPS))
+        {
+            WeakOp();
+            Elem();
+        }
+    }
+
+    private void LValue() throws SyntaxException {
+        match(IDENT);
+        if(t.kind == LSQUARE)
+        {
+            match(LSQUARE);
+            Expression();
+            match(RSQUARE);
+        }
+    }
+
+    private void Closure() throws SyntaxException {
+        match(LCURLY);
+        if(t.kind != ARROW) {
+            VarDec();
+        }
+        while(t.kind != ARROW) {
+            if (t.kind == COMMA) {
+                match(COMMA);
+                VarDec();
+            }
+        }
+        match(ARROW);
+        while(isKind(Statement_PredictSet)){
+            Statement();
+            match(SEMICOLON);
+        }
+        match(RCURLY);
     }
 
     private void Type() throws SyntaxException{
