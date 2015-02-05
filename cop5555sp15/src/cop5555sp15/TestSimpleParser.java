@@ -318,7 +318,9 @@ public class TestSimpleParser {
     public void statementComplete()throws SyntaxException {
         System.out.println("maplist1");
         String input = "import X.Y.Z; class A  { A = true; print A; while(A == true) {%B[C];};" +
-                " while*(!A == false){A = A<<2;};} ";
+                " while*(!A == false){A = A<<2;}; while*(A == 1..2){A = A<<2;};" +
+                " if(A > 0){A = A-1;}; if(A > 2){A = A-2;}else{A = A+2;};" +
+                " %B[C]; return A;}";
         System.out.println(input);
         parseCorrectInput(input);
     }
