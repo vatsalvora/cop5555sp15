@@ -316,11 +316,37 @@ public class TestSimpleParser {
 
     @Test
     public void statementComplete()throws SyntaxException {
-        System.out.println("maplist1");
+        System.out.println("statementComplete");
         String input = "import X.Y.Z; class A  { A = true; print A; while(A == true) {%B[C];};" +
                 " while*(!A == false){A = A<<2;}; while*(A == 1..2){A = A<<2;};" +
                 " if(A > 0){A = A-1;}; if(A > 2){A = A-2;}else{A = A+2;};" +
                 " %B[C]; return A;}";
+        System.out.println(input);
+        parseCorrectInput(input);
+    }
+
+    @Test
+    public void FactorComplete()throws SyntaxException {
+        System.out.println("FactorComplete");
+        String input = "import X.Y.Z; class A  { A = key(B); print value(A); A = size(B);" +
+                " A={A->print C;};" +
+                " return A;}";
+        System.out.println(input);
+        parseCorrectInput(input);
+    }
+
+    @Test
+    public void incompleteVarDec() throws SyntaxException{
+        System.out.println("incompleteVarDec");
+        String input = "class A  {def A:}";
+        System.out.println(input);
+        parseIncorrectInput(input, RCURLY);
+    }
+
+    @Test
+    public void multipleFormalArgs() throws SyntaxException{
+        System.out.println("multipleFormalArgs");
+        String input = "class A  {def A={A,B:boolean,C->%B[C];};}";
         System.out.println(input);
         parseCorrectInput(input);
     }
