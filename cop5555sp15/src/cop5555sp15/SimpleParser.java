@@ -98,9 +98,10 @@ public class SimpleParser {
 	static final Kind[] VERY_STRONG_OPS = { LSHIFT, RSHIFT };
     static final Kind[] Type_Poss = {KW_INT,KW_BOOLEAN,KW_STRING,AT};
     static final Kind[] Simple_Type = {KW_INT,KW_BOOLEAN,KW_STRING};
-    static final Kind[] Statement_Kinds = {IDENT,KW_WHILE,KW_IF,MOD,KW_RETURN};
     static final Kind[] Statement_PredictSet = {IDENT,KW_PRINT,KW_WHILE,KW_IF,MOD,KW_RETURN};
     static final Kind[] Factor_Kinds = {INT_LIT,BL_TRUE,BL_FALSE,STRING_LIT};
+    static final Kind[] Factor_Predict_Set = {IDENT,INT_LIT,BL_TRUE,BL_FALSE,STRING_LIT,LPAREN,NOT,MINUS,
+    KW_KEY,KW_SIZE,KW_VALUE,LCURLY,AT};
 
 
 	public void parse() throws SyntaxException {
@@ -135,14 +136,14 @@ public class SimpleParser {
 		match(LCURLY);
 		while(t.kind != RCURLY)
         {
-            if(t.kind == KW_DEF) {
+            if(isKind(KW_DEF)) {
                 match(KW_DEF);
-                if (t.kind == IDENT) {
+                if (isKind(IDENT)) {
                     match(IDENT);
-                    if (t.kind == COLON) { // VarDec
+                    if (isKind(COLON)) { // VarDec
                         match(COLON);
                         Type();
-                    } else if (t.kind == ASSIGN) { // ClosureDec
+                    } else if (isKind(ASSIGN)) { // ClosureDec
                         match(ASSIGN);
                         Closure();
                     }
@@ -150,10 +151,9 @@ public class SimpleParser {
                 }
             }
             else {
-                if (isKind(Statement_Kinds)) {
+                if (isKind(Statement_PredictSet)) {
                     Statement();
                     match(SEMICOLON);
-                    break;
                 } else {
                     match(SEMICOLON);
                 }
@@ -163,9 +163,9 @@ public class SimpleParser {
 	}
 
     private void VarDec()  throws SyntaxException {
-        if (t.kind == IDENT) {
+        if (isKind(IDENT)) {
             match(IDENT);
-            if (t.kind == COLON) { // VarDec
+            if (isKind(COLON)) { // VarDec
                 match(COLON);
                 Type();
             }
@@ -176,25 +176,25 @@ public class SimpleParser {
 
     private void Statement() throws SyntaxException {
         //TODO implement
-        if(t.kind == IDENT)
+        if(isKind(IDENT))
         {
             LValue();
             match(ASSIGN);
             Expression();
         }
-        else if(t.kind == KW_PRINT)
+        else if(isKind(KW_PRINT))
         {
             match(KW_PRINT);
             Expression();
         }
-        else if(t.kind == KW_WHILE)
+        else if(isKind(KW_WHILE))
         {
             match(KW_WHILE);
-            if(t.kind == TIMES){
+            if(isKind(TIMES)){
                 match(TIMES);
                 match(LPAREN);
                 Expression();
-                if(t.kind == RANGE) // Range Expression
+                if(isKind(RANGE)) // Range Expression
                 {
                     match(RANGE);
                     Expression();
@@ -210,25 +210,25 @@ public class SimpleParser {
                 Block();
             }
         }
-        else if(t.kind == KW_IF)
+        else if(isKind(KW_IF))
         {
             match(KW_IF);
             match(LPAREN);
             Expression();
             match(RPAREN);
             Block();
-            if(t.kind == KW_ELSE)
+            if(isKind(KW_ELSE))
             {
                 match(KW_ELSE);
                 Block();
             }
         }
-        else if(t.kind == MOD)
+        else if(isKind(MOD))
         {
             match(MOD);
             Expression();
         }
-        else if(t.kind == KW_RETURN)
+        else if(isKind(KW_RETURN))
         {
             match(KW_RETURN);
             Expression();
@@ -275,15 +275,15 @@ public class SimpleParser {
     }
 
     private void Factor() throws SyntaxException {
-        if(t.kind == IDENT)
+        if(isKind(IDENT))
         {
             match(IDENT);
-            if(t.kind == LSQUARE){
+            if(isKind(LSQUARE)){
                 match(LSQUARE);
                 Expression();
                 match(RSQUARE);
             }
-            else if(t.kind == LPAREN) // ClosureEvalExpression
+            else if(isKind(LPAREN)) // ClosureEvalExpression
             {
                 match(LPAREN);
                 ExpressionList();
@@ -294,44 +294,44 @@ public class SimpleParser {
         {
             match(Factor_Kinds);
         }
-        else if(t.kind == LPAREN)
+        else if(isKind(LPAREN))
         {
             match(LPAREN);
             Expression();
             match(RPAREN);
         }
-        else if(t.kind == NOT)
+        else if(isKind(NOT))
         {
             match(NOT);
             Factor();
         }
-        else if(t.kind == KW_SIZE)
+        else if(isKind(KW_SIZE))
         {
             match(KW_SIZE);
             Expression();
         }
-        else if(t.kind == KW_KEY)
+        else if(isKind(KW_KEY))
         {
             match(KW_KEY);
             match(LPAREN);
             Expression();
             match(RPAREN);
         }
-        else if(t.kind == KW_VALUE)
+        else if(isKind(KW_VALUE))
         {
             match(KW_VALUE);
             match(LPAREN);
             Expression();
             match(RPAREN);
         }
-        else if(t.kind == LCURLY)
+        else if(isKind(LCURLY))
         {
             Closure();
         }
-        else if(t.kind == AT) // List
+        else if(isKind(AT)) // List
         {
             match(AT);
-            if(t.kind == AT) //MapList
+            if(isKind(AT)) //MapList
             {
                 match(AT);
                 match(LSQUARE);
@@ -344,13 +344,17 @@ public class SimpleParser {
                 match(RSQUARE);
             }
         }
+        else
+        {
+            throw new SyntaxException(t,"Not a Factor Kind!!");
+        }
     }
 
     private void KeyValueList() throws SyntaxException {
-        if(t.kind != RSQUARE)
+        if(isKind(Factor_Predict_Set))
         {
             KeyValueExpression();
-            while(t.kind != RSQUARE)
+            while(isKind(COMMA))
             {
                 match(COMMA);
                 KeyValueExpression();
@@ -365,10 +369,10 @@ public class SimpleParser {
     }
 
     private void ExpressionList() throws SyntaxException {
-        if(t.kind != RPAREN)
+        if(isKind(Factor_Predict_Set))
         {
             Expression();
-            while(t.kind != RPAREN){
+            while(isKind(COMMA)){
                 match(COMMA);
                 Expression();
             }
@@ -390,7 +394,7 @@ public class SimpleParser {
 
     private void LValue() throws SyntaxException {
         match(IDENT);
-        if(t.kind == LSQUARE)
+        if(isKind(LSQUARE))
         {
             match(LSQUARE);
             Expression();
@@ -400,14 +404,12 @@ public class SimpleParser {
 
     private void Closure() throws SyntaxException {
         match(LCURLY);
-        if(t.kind != ARROW) {
+        if(!isKind(ARROW)) {
             VarDec();
         }
-        while(t.kind != ARROW) {
-            if (t.kind == COMMA) {
-                match(COMMA);
-                VarDec();
-            }
+        while(isKind(COMMA)) {
+            match(COMMA);
+            VarDec();
         }
         match(ARROW);
         while(isKind(Statement_PredictSet)){
@@ -419,7 +421,7 @@ public class SimpleParser {
 
     private void Type() throws SyntaxException{
         match(Type_Poss);
-        if(t.kind == AT)
+        if(isKind(AT))
         {
             match(AT);
             match(LSQUARE);
@@ -428,7 +430,7 @@ public class SimpleParser {
             Type();
             match(RSQUARE);
         }
-        else if(t.kind == LSQUARE)
+        else if(isKind(LSQUARE))
         {
             match(LSQUARE);
             Type();

@@ -10,8 +10,7 @@ import static cop5555sp15.TokenStream.Kind.*;
 public class TestSimpleParser {
 
 	
-	private void parseIncorrectInput(String input,
-			Kind ExpectedIncorrectTokenKind) {
+	private void parseIncorrectInput(String input,Kind ExpectedIncorrectTokenKind) {
 		TokenStream stream = new TokenStream(input);
 		Scanner scanner = new Scanner(stream);
 		scanner.scan();
