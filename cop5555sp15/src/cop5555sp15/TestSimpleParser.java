@@ -304,5 +304,21 @@ public class TestSimpleParser {
 		String input = "class A  { x = @@[x:y]; y = @@[x:y,4:5]; } ";
 		System.out.println(input);
 		parseCorrectInput(input);
-	} 	
+	}
+
+    @Test
+    public void incompleteBlock() throws SyntaxException{
+        System.out.println("incompleteBlock");
+        String input = "class A  {";
+        System.out.println(input);
+        parseIncorrectInput(input, EOF);
+    }
+
+    @Test
+    public void statementComplete()throws SyntaxException {
+        System.out.println("maplist1");
+        String input = "import X.Y.Z; class A  { A = true; print A; while(A == true) {%B[C];};} ";
+        System.out.println(input);
+        parseCorrectInput(input);
+    }
 }

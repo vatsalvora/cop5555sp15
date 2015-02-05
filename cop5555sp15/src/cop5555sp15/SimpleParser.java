@@ -134,7 +134,7 @@ public class SimpleParser {
 
 	private void Block() throws SyntaxException {
 		match(LCURLY);
-		while(t.kind != RCURLY)
+		while(!isKind(RCURLY))
         {
             if(isKind(KW_DEF)) {
                 match(KW_DEF);
@@ -163,19 +163,17 @@ public class SimpleParser {
 	}
 
     private void VarDec()  throws SyntaxException {
-        if (isKind(IDENT)) {
+        if(isKind(IDENT)) {
             match(IDENT);
             if (isKind(COLON)) { // VarDec
                 match(COLON);
                 Type();
             }
-            // else empty
-        }
-        // else empty
+            // else Empty
+        }//else Empty
     }
 
     private void Statement() throws SyntaxException {
-        //TODO implement
         if(isKind(IDENT))
         {
             LValue();
@@ -236,7 +234,6 @@ public class SimpleParser {
     }
 
     private void Expression() throws SyntaxException{
-        //TODO implement
         Term();
         while(isKind(REL_OPS))
         {
@@ -303,6 +300,11 @@ public class SimpleParser {
         else if(isKind(NOT))
         {
             match(NOT);
+            Factor();
+        }
+        else if(isKind(MINUS))
+        {
+            match(MINUS);
             Factor();
         }
         else if(isKind(KW_SIZE))
