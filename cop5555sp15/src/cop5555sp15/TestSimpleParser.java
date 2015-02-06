@@ -31,7 +31,7 @@ public class TestSimpleParser {
 		System.out.println(stream);
 		SimpleParser parser = new SimpleParser(stream);
 		parser.parse();
-	}	
+	}
 
 
 	/**This is an example of testing correct input
@@ -349,6 +349,18 @@ public class TestSimpleParser {
     public void multipleFormalArgs() throws SyntaxException{
         System.out.println("multipleFormalArgs");
         String input = "class A  {def A={A,B:boolean,C->%B[C];};}";
+        System.out.println(input);
+        parseCorrectInput(input);
+    }
+
+    @Test
+    public void allOPS()throws SyntaxException {
+        System.out.println("allOPS");
+        String input = "import X.Y.Z; class A  { A = key(B)<<B; print value(A)>>C; A = size(B)*B;" +
+                " A={A->print C;}; A=C; A=C[A]; A = 2; A = true; A = false; A = \"Test\";" +
+                " A = \"Test\"+\"2\"; A = (1*2)/2; A=!B+2; A = -A-1; A = A(A,B[C],@[D])|2;" +
+                " A = @[D]&2; A = @@[A:A[B],B:false,C:2]==0; A =0|((B!=0)+2*3); B=C>0; C=B<0;" +
+                " D=2*(C>=0); B=(D<=0)/5; return A;}";
         System.out.println(input);
         parseCorrectInput(input);
     }
