@@ -325,7 +325,7 @@ public class TestSimpleParser {
         parseCorrectInput(input);
     }
 
-	/**This is an example of testing correct input
+    /**This is an example of testing correct input
 	 * Just call parseCorrectInput
 	 * @throws SyntaxException
 	 */
