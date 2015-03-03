@@ -118,7 +118,7 @@ public class SimpleParser {
     }
 
     private void ImportList() throws SyntaxException {
-        while (t.kind != KW_CLASS) {
+        while (!isKind(KW_CLASS)) {
             match(KW_IMPORT);
 
             match(IDENT);
@@ -152,8 +152,8 @@ public class SimpleParser {
             } else {
                 if (isKind(Statement_PredictSet)) {
                     Statement();
-                    match(SEMICOLON);
-                } else {
+                }else
+                {
                     match(SEMICOLON);
                 }
             }
@@ -216,6 +216,7 @@ public class SimpleParser {
             match(KW_RETURN);
             Expression();
         }
+        match(SEMICOLON);
     }
 
     private void Expression() throws SyntaxException {
@@ -372,7 +373,6 @@ public class SimpleParser {
         match(ARROW);
         while (isKind(Statement_PredictSet)) {
             Statement();
-            match(SEMICOLON);
         }
         match(RCURLY);
     }
