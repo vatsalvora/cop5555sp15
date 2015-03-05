@@ -31,7 +31,8 @@ public interface ASTVisitor {
 	Object visitListExpression(ListExpression listExpression, Object arg)throws Exception;
 	Object visitListOrMapElemExpression(
             ListOrMapElemExpression listOrMapElemExpression, Object arg)throws Exception;
-	Object visitListType(ListType listType, Object arg)throws Exception;
+	Object visitUndeclaredType(UndeclaredType undeclaredType, Object arg) throws Exception;
+    Object visitListType(ListType listType, Object arg)throws Exception;
 	Object visitMapListExpression(MapListExpression mapListExpression,
                                   Object arg)throws Exception;
 	Object visitPrintStatement(PrintStatement printStatement, Object arg)throws Exception;
@@ -52,4 +53,5 @@ public interface ASTVisitor {
                                    Object arg)throws Exception;
 	Object visitWhileStatement(WhileStatement whileStatement, Object arg)throws Exception;
 
+    
 }

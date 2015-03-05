@@ -249,7 +249,12 @@ public class ToStringVisitor implements ASTVisitor {
 		return null;
 	}
 
-	@Override
+    @Override
+    public Object visitUndeclaredType(UndeclaredType undeclaredType, Object arg) throws Exception {
+        return null;
+    }
+
+    @Override
 	public Object visitIdentExpression(IdentExpression identExpression,
 			Object arg) {
 		sb.append(arg).append("IdentExpression").append('\n');

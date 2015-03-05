@@ -63,6 +63,14 @@ public class TestParser {
         System.out.println(parseCorrectInput(input));
     }
 
+    @Test
+    public void def_undeclared_type() throws SyntaxException {
+        System.out.println("***********\ndef_undeclared_type");
+        String input = "class A {def B:int; def C:boolean; def S: string; def X;} ";
+        System.out.println(input);
+        System.out.println(parseCorrectInput(input));
+    }
+
 
 
     @Test

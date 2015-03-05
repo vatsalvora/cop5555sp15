@@ -48,6 +48,23 @@ public class TestParserErrorHandling {
 		parseIncorrectInput(input, ExpectedIncorrectTokenKind);
 	}
 
+    @Test
+    public void import_Mult_errors() throws SyntaxException {
+        System.out.println("***********\nimport_Mult_errors");
+        String input = "import class A { def A:ints;} "; // this input is wrong.
+        System.out.println(input);
+        Kind ExpectedIncorrectTokenKind = KW_CLASS;
+        parseIncorrectInput(input, ExpectedIncorrectTokenKind, IDENT);
+    }
+
+    @Test
+    public void mult_imports() throws SyntaxException {
+        System.out.println("***********\nmult_imports");
+        String input = "import; import X.; import Y; class A {} "; // this input is wrong.
+        System.out.println(input);
+        parseIncorrectInput(input, SEMICOLON,SEMICOLON);
+    }
+
 	@Test
 	public void def_simple_type2() throws SyntaxException {
 		System.out.println("***********\ndef_simple_type2");

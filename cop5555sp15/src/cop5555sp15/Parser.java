@@ -146,23 +146,48 @@ public class Parser {
     }
 
     private List<QualifiedName> ImportList() throws SyntaxException {
-        List<QualifiedName> imports = new ArrayList<QualifiedName>();
-        while (!isKind(KW_CLASS)) {
-            TokenStream.Token firstToken = t;
+        List<QualifiedName> imports = null;
+        try {
+            imports = new ArrayList<QualifiedName>();
+            while (!isKind(KW_CLASS)) {
+                TokenStream.Token firstToken = t;
 
-            match(KW_IMPORT);
-            StringBuilder name = new StringBuilder();
-            name.append(t.getText());
-            match(IDENT);
-
-            while (t.kind != SEMICOLON) {
-                name.append("/");
-                match(DOT);
+                match(KW_IMPORT);
+                StringBuilder name = new StringBuilder();
                 name.append(t.getText());
                 match(IDENT);
+
+                while (t.kind != SEMICOLON) {
+                    name.append("/");
+                    match(DOT);
+                    name.append(t.getText());
+                    match(IDENT);
+                }
+                match(SEMICOLON);
+                imports.add(new QualifiedName(firstToken, name.toString()));
             }
-            match(SEMICOLON);
-            imports.add(new QualifiedName(firstToken, name.toString()));
+        }
+        catch (SyntaxException e)
+        {
+            while(!(isKind(SEMICOLON) || isKind(KW_CLASS))) {
+                consume();
+            }
+            if(isKind(SEMICOLON)){
+                match(SEMICOLON);
+                exceptions.add(e);
+                while(!isKind(KW_CLASS))
+                {
+                    ImportList();
+                }
+            }
+            else if(isKind(KW_CLASS)){
+                exceptions.add(e);
+                return null;
+            }
+            else
+            {
+                throw e;
+            }
         }
         return imports;
     }
@@ -193,6 +218,11 @@ public class Parser {
                             if(closure != null) {
                                 blockElem.add(new ClosureDec(firstTokenBlockElem, identToken, closure));
                             }
+                        }
+                        else //Undeclared Type
+                        {
+                            Type type = new UndeclaredType(firstTokenBlockElem);
+                            blockElem.add(new VarDec(firstTokenBlockElem, identToken, type));
                         }
                         match(SEMICOLON);
                     }
