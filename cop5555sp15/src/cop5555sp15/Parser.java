@@ -286,7 +286,7 @@ public class Parser {
 
     private VarDec VarDec(TokenStream.Token firstToken) throws SyntaxException {
         TokenStream.Token identToken = null;
-        Type type = new SimpleType(firstToken,firstToken); //initialize
+        Type type = new UndeclaredType(firstToken);
         if (isKind(IDENT)) {
             identToken = t;
             match(IDENT);
@@ -502,7 +502,7 @@ public class Parser {
             match(LPAREN);
             Expression expressionResult = Expression();
             match(RPAREN);
-            expression = new KeyExpression(firstToken, expressionResult);
+            expression = new ValueExpression(firstToken, expressionResult);
         } else if (isKind(LCURLY)) {
             TokenStream.Token firstToken = t;
             Closure closure = Closure();

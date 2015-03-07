@@ -268,4 +268,52 @@ public class TestParser {
         System.out.println(input);
         System.out.println(parseCorrectInput(input));
     }
+
+    @Test
+    public void LValueTests()throws SyntaxException {
+        System.out.println("***********\nLValueTests");
+        String input = "import X; class A  { x = y; y = x[a+1]; } ";
+        System.out.println(input);
+        System.out.println(parseCorrectInput(input));
+    }
+
+    @Test
+    public void ListTests()throws SyntaxException {
+        System.out.println("***********\nListTests");
+        String input = "import X; class A  { z = @[x+1, y+1]; b = @[]; c = @@[x+1:y+1, z:y+1]; c = @@[];} ";
+        System.out.println(input);
+        System.out.println(parseCorrectInput(input));
+    }
+
+    @Test
+    public void def_closure3() throws SyntaxException {
+        System.out.println("***********\ndef_closure3");
+        String input = "class A {def C={x,y,z:int -> a=b;};  def z:string;} ";
+        System.out.println(input);
+        System.out.println(parseCorrectInput(input));
+    }
+
+    @Test
+    public void test_Literals() throws SyntaxException {
+        System.out.println("***********\ntest_Literals");
+        String input = "class A {x = 1; x = \"Hello\"; x = true;} ";
+        System.out.println(input);
+        System.out.println(parseCorrectInput(input));
+    }
+
+    @Test
+    public void test_Keywords() throws SyntaxException {
+        System.out.println("***********\ntest_Keywords");
+        String input = "class A {x = size(1); x = key(\"Hello\"); x = value(true); return z;} ";
+        System.out.println(input);
+        System.out.println(parseCorrectInput(input));
+    }
+
+    @Test
+    public void test_Closure_Expression() throws SyntaxException {
+        System.out.println("***********\ntest_Closure_Expression");
+        String input = "class A {x = {x,y:string -> z=1;};} ";
+        System.out.println(input);
+        System.out.println(parseCorrectInput(input));
+    }
 }
