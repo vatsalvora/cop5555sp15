@@ -14,8 +14,19 @@ import static cop5555sp15.TokenStream.Kind.RSQUARE;
  */
 public class Parser {
 
+    private String errors;
+
     public List<SyntaxException> getExceptionList() {
         return exceptions;
+    }
+
+    public String getErrors() {
+        StringBuilder ret = new StringBuilder();
+        for(SyntaxException e : exceptions)
+        {
+            ret.append(e.toString() +"\n");
+        }
+        return errors;
     }
 
     @SuppressWarnings("serial")
