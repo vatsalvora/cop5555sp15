@@ -52,5 +52,4 @@ public interface ASTVisitor {
 			Object arg)throws Exception;
 	Object visitWhileStatement(WhileStatement whileStatement, Object arg)throws Exception;
 	Object visitUndeclaredType(UndeclaredType undeclaredType, Object arg) throws Exception;
-
 }
