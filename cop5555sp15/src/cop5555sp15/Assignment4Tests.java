@@ -85,8 +85,7 @@ public class Assignment4Tests {
         DynamicClassLoader loader = new DynamicClassLoader(Thread
                 .currentThread().getContextClassLoader());
         Class<?> testClass = loader.define(name, bytecode);
-        Codelet codelet = (Codelet) testClass.newInstance();
-        codelet.execute();
+        Codelet codelet = (Codelet) testClass.newInstance();        codelet.execute();
     }
    
 
@@ -263,8 +262,6 @@ public void stringConcat() throws Exception{
 	assertNotNull(program);
 	typeCheckCorrectAST(program);
 	byte[] bytecode = generateByteCode(program);
-	FileOutputStream t = new FileOutputStream(new File("A.class"));
-	t.write(bytecode);
 	assertNotNull(bytecode);
 	System.out.println("\nexecuting bytecode:");
 	executeByteCode(program.JVMName, bytecode);
@@ -666,6 +663,8 @@ public void intVariable() throws Exception{
 	typeCheckCorrectAST(program);
 	byte[] bytecode = generateByteCode(program);
 	assertNotNull(bytecode);
+	FileOutputStream f = new FileOutputStream(new File("A.class"));
+	f.write(bytecode);
 	System.out.println("\nexecuting bytecode:");
 	executeByteCode(program.JVMName, bytecode);
 }
