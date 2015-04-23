@@ -89,7 +89,8 @@ public class Assignment4Tests {
         DynamicClassLoader loader = new DynamicClassLoader(Thread
                 .currentThread().getContextClassLoader());
         Class<?> testClass = loader.define(name, bytecode);
-        Codelet codelet = (Codelet) testClass.newInstance();        codelet.execute();
+        Codelet codelet = (Codelet) testClass.newInstance();
+		codelet.execute();
     }
    
 

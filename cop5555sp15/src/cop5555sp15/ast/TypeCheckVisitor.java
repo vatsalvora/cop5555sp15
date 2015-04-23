@@ -48,6 +48,16 @@ public class TypeCheckVisitor implements ASTVisitor, TypeConstants {
 
 			return assignmentStatement.lvalue.getType();
 		}
+		else if((assignmentStatement.lvalue.getType().contains("Ljava/util/List<Ljava/util/List")))
+		{
+			if(expression.contains("Ljava/util/ArrayList"))
+			{
+				return assignmentStatement.expression.getType();
+			}
+			else {
+				throw new TypeCheckException("Incompatible Types!",assignmentStatement);
+			}
+		}
 		else if((assignmentStatement.lvalue.getType().contains("Ljava/util/List")))
 		{
 			if((assignmentStatement.expression.getType().contains("Ljava/util/ArrayList")))

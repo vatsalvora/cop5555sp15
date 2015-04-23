@@ -31,7 +31,7 @@ public class Parser {
 
     @SuppressWarnings("serial")
     public class SyntaxException extends Exception {
-        TokenStream.Token t;
+        public TokenStream.Token t;
         TokenStream.Kind[] expected;
         String msg;
 

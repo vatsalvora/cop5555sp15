@@ -494,8 +494,7 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes, TypeConstants {
 		mv.visitFieldInsn(GETFIELD, className, ident, "Ljava/util/List;");
 		String type = listOrMapElemExpression.getType();
 		String index = listOrMapElemExpression.expression.firstToken.getText();
-		int i = Integer.parseInt(index);
-		mv.visitLdcInsn(i);
+		listOrMapElemExpression.expression.visit(this,arg);
 		mv.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "get", "(I)Ljava/lang/Object;", true);
 		if(type.equals("I")) {
 			mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
