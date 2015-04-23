@@ -1,9 +1,12 @@
-package cop5555sp15;
+package cop5555sp15.Tests;
 
 import static org.junit.Assert.*;
 
 import java.util.List;
 
+import cop5555sp15.Parser;
+import cop5555sp15.Scanner;
+import cop5555sp15.TokenStream;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

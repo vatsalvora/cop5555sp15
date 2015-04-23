@@ -70,7 +70,7 @@ public class Parser {
     TokenStream.Token t;
     List<SyntaxException> exceptions;
 
-    Parser(TokenStream tokens) {
+    public Parser(TokenStream tokens) {
         this.tokens = tokens;
         t = tokens.nextToken();
         exceptions = new ArrayList<SyntaxException>();

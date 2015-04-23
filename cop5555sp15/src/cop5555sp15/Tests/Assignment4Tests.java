@@ -1,4 +1,4 @@
-package cop5555sp15;
+package cop5555sp15.Tests;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -7,6 +7,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
+import cop5555sp15.Codelet;
+import cop5555sp15.Parser;
+import cop5555sp15.Scanner;
+import cop5555sp15.TokenStream;
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.TraceClassVisitor;

@@ -1,7 +1,8 @@
-package cop5555sp15;
+package cop5555sp15.Tests;
 
 import static cop5555sp15.TokenStream.Kind.*;
 
+import cop5555sp15.TokenStream;
 import cop5555sp15.TokenStream.Kind;
 import cop5555sp15.TokenStream.Token;
 

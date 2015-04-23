@@ -1,10 +1,12 @@
-package cop5555sp15;
+package cop5555sp15.Tests;
 
 import static org.junit.Assert.*;
 
+import cop5555sp15.Scanner;
+import cop5555sp15.TokenStream;
 import org.junit.Rule;
 import org.junit.Test;
-import cop5555sp15.SimpleParser.SyntaxException;
+import cop5555sp15.Tests.SimpleParser.SyntaxException;
 import cop5555sp15.TokenStream.Kind;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.Timeout;

@@ -244,7 +244,7 @@ public class TypeCheckVisitor implements ASTVisitor, TypeConstants {
 		{
 			throw new TypeCheckException("Incorrect Index Type!",expressionLValue);
 		}
-		System.out.println(expressionLValue.expression.getType());
+//		System.out.println(expressionLValue.expression.getType());
 		String ident = expressionLValue.identToken.getText();
 		VarDec d = (VarDec) symbolTable.lookup(ident);
 		if( d != null)

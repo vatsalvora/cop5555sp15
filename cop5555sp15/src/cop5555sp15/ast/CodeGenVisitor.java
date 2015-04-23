@@ -457,8 +457,8 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes, TypeConstants {
 			exp.visit(this, arg);
 			if(exp.getType().contains("Ljava/util/List<"))
 			{
-				System.out.println(exp);
-				System.out.println(exp.getType());
+//				System.out.println(exp);
+//				System.out.println(exp.getType());
 				//
 			}
 			else if (exp.getType().equals(intType)) {

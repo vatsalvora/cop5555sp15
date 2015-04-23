@@ -1,5 +1,7 @@
-package cop5555sp15;
+package cop5555sp15.Tests;
 
+import cop5555sp15.Scanner;
+import cop5555sp15.TokenStream;
 import cop5555sp15.TokenStream.Kind;
 import cop5555sp15.TokenStream.Token;
 import org.junit.Test;
